@@ -116,6 +116,11 @@ public sealed class Plugin(int port, string pluginUuid, string registerEvent)
         var payload = json["payload"] as JsonObject;
         if (evt is null || context is null) return;
 
+        // Le impostazioni arrivano anche dentro gli eventi di manopole e tasti: le riallineo
+        // sempre, perché non tutti i software inviano didReceiveSettings dopo una modifica.
+        if (evt != "willAppear" && payload?["settings"] is JsonObject current && _instances.TryGetValue(context, out var known))
+            known.Settings = (JsonObject)current.DeepClone();
+
         switch (evt)
         {
             case "willAppear":
