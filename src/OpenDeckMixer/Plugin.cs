@@ -222,11 +222,6 @@ public sealed class Plugin(int port, string pluginUuid, string registerEvent)
     private static List<string> Apps(Instance instance) => Format.ParseApps((string?)instance.Settings["apps"]);
 
     /// <summary>
-    /// Il master usa i tasti multimediali (che mostrano il popup di Windows) a meno
-    /// che il popup non sia disattivato nelle impostazioni. Il popup di Windows
-    /// mostra solo il volume master, quindi per le app non avrebbe senso.
-    /// </summary>
-    /// <summary>
     /// Popup nostro per le app (quello di Windows mostra solo il master).
     /// Se nessuna app dell'elenco sta usando l'audio, lo dice nel popup.
     /// </summary>
@@ -238,6 +233,10 @@ public sealed class Plugin(int port, string pluginUuid, string registerEvent)
         Osd.Show(Format.NormalizeProcess(result?.Name ?? apps[0]), result?.State, result?.ProcessId ?? 0);
     }
 
+    /// <summary>
+    /// Il master usa i tasti multimediali (che mostrano il popup di Windows) a meno
+    /// che il popup non sia disattivato nelle impostazioni.
+    /// </summary>
     private static bool UsesMediaKeys(Instance instance) =>
         instance.Action == MasterAction && Format.Popup(instance.Settings);
 
